@@ -1,0 +1,152 @@
+﻿ @model List<Company>
+@{
+    ViewData["Title"] = "Industry";
+    Layout = "~/Views/Shared/_LayoutManager.cshtml";
+}
+
+
+
+<div class="container-fluid p-0">
+
+    <div class="mb-3">
+        <h1 class="h3 d-inline align-middle">Quản lý công ty</h1>
+    </div>
+
+    <div class="mb-3">
+        <button style="display:none" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal" onclick="showModal()">
+            <i class="align-middle" data-feather="plus"></i> Thêm mới
+        </button>
+
+        <a asp-action="CreateCompanySV" asp-controller="Company" asp-area="Admin" class="btn btn-primary">
+            <i class="align-middle" data-feather="plus"></i> Thêm mới
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-xl-12">
+         
+            <div class="card">
+                <table class="table table-striped" id="tblCompant">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên công ty</th>
+                            <th>Địa chỉ</th>
+                            <th>Thành phố</th>
+                            <th>Huyện</th>
+                            <th>Mã bưu điện</th>
+                            <th>Số điện thoại</th>
+                            <th nowrap>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int STT = 1;
+                        }
+                        @foreach (var item in Model)
+                        {
+                            <tr id="hihi-@item.Id">
+                                <td>@STT</td>
+                                <td id="company-name-@item.Id">@item.Name</td>
+                                <td id="street-address-@item.Id">@item.StreetAddress</td>
+                                 <td id="city-@item.Id">@item.City</td>
+                                <td id="state-@item.Id">@item.State</td>
+                                <td id="postal-code-@item.Id">@item.PostalCode</td>
+                                <td id="phone-number-@item.Id">@item.PhoneNumber</td>
+
+                                <td class="table-action">
+                                    <a style="display:none" href="#" onclick="populateModalWithCompanyDetails(@item.Id)">
+                                        <i class="fal fa-pen" style="color: #000000; margin-right: 25px;"></i>
+                                    </a>
+                                    <a asp-action="UpdateCompany" asp-controller="Company" asp-area="Admin" asp-route-id="@item.Id">
+                                        <i class="fal fa-pen" style="color: #000000; margin-right: 25px;"></i>
+                                    </a>
+
+                                    <a onclick="deleteCompany(@item.Id)">
+                                        <i class="fal fa-trash" style="color: #000000;"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            STT++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Thêm mới một công ty</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn-close" onclick="resetText()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Tên công ty <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="CompanyName" placeholder="Nhập tên công ty" style="margin-bottom: 5px;" />
+                    <span id="checkName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Địa chỉ <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="StreetAddress" placeholder="Nhập địa chỉ" style="margin-bottom: 5px;" />
+                    <span id="checkAddress" class="text-danger"></span>
+                </div>
+            </div>
+
+             <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Thành phố <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="City" placeholder="Nhập thành phố" style="margin-bottom: 5px;" />
+                    <span id="checkCity" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Nhập huyện <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="State" placeholder="Nhập huyện" style="margin-bottom: 5px;" />
+                    <span id="checkState" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Nhập mã bưu điện <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="PostalCode" placeholder="Nhập mã bưu điện" style="margin-bottom: 5px;" />
+                    <span id="checkPostalCode" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Nhập số điện thoại <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="PhoneNumber" placeholder="Nhập số điện thoại" style="margin-bottom: 5px;" />
+                    <span id="checkphoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal" onclick="resetText()">Đóng</button>
+                <button type="button" class="btn btn-primary" id="save" onclick="saveCompany()">Thêm mới</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script src="~/js/company.js"></script>
+    <script>
+        document.getElementById("CompanyName").addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                createIndustry();
+            }
+        });</script>
+}

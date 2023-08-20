@@ -1,0 +1,277 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model ProductReviewVM
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+@{
+    var user = await UserManager.GetUserAsync(User) as ApplicationUser;
+
+}
+
+@{
+    ViewData["Title"] = "Industry";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ <form method="post">
+    <input asp-for="ShoppingCart.ProductId" hidden />
+    <input asp-for="ShoppingCart.Id" hidden />
+    <div class="services-area2">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="single-services d-flex align-items-center mb-0">
+                                <div class="features-img">
+                                    <img width="50%" height="50%" src="@Model.ShoppingCart.Product.ProductImages[0].ImageUrl" alt="" />
+                                </div>
+                                <div class="features-caption">
+                                    <h3>@Model.ShoppingCart.Product.Title</h3>
+                                    <p>@Model.ShoppingCart.Product.Author</p>
+                               @*     số lượng đã bán <p>@Model.TotalOrderedQuantity</p> *@
+                                   @*  sp còn lại <p>@Model.ShoppingCart.Product.Quantity</p> *@
+                                  @*   <div class="review">
+                                        <div class="rating">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                        </div>
+                                        <p>(120 Review)</p>
+                                    </div> *@
+                                    <div class="price">
+                                        <span>@Model.ShoppingCart.Product.Price100 Vnđ</span>
+                                    </div>
+                                    <div class="">
+                                        Số lượng: 
+                                        <input asp-for="ShoppingCart.Count" type="number" value="1" class=" text-end"
+                                               aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" style="width: 50px;margin-bottom: 10px;"  />
+                                    </div>
+
+                                   
+                                    <button type="submit"
+                                            class=" white-btn mr-10">
+                                        Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+    <section class="our-client section-padding best-selling">
+        <div class="container">
+            <div class="row">
+                <div class="offset-xl-1 col-xl-10">
+                    <div class="nav-button f-left">
+                        <nav>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <a class="nav-link active"
+                                   id="nav-one-tab"
+                                   data-bs-toggle="tab"
+                                   href="#nav-one"
+                                   role="tab"
+                                   aria-controls="nav-one"
+                                   aria-selected="true">Mô tả</a>
+                               
+                                
+                                <a class="nav-link"
+                                   id="nav-three-tab"
+                                   data-bs-toggle="tab"
+                                   href="#nav-three"
+                                   role="tab"
+                                   aria-controls="nav-three"
+                                   aria-selected="false">Bình luận</a>
+                              
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active"
+                     id="nav-one"
+                     role="tabpanel"
+                     aria-labelledby="nav-one-tab">
+                    <div class="row">
+                        <div class="offset-xl-1 col-lg-9">
+                            <p>
+                                @Model.ShoppingCart.Product.Description
+                            </p>
+                        </div>
+                    </div>
+                </div>
+             
+             
+                <div class="tab-pane fade"
+                 id="nav-three"
+                     role="tabpanel"
+                     aria-labelledby="nav-four-tab">
+                    <div class="row">
+                        <div class="offset-xl-1 col-lg-9">
+
+                        <div class="product-reviews">
+                            @if (Model.ProductReviewList != null)
+                            {
+                                @foreach (var review in Model.ProductReviewList.OrderByDescending(p=>p.DateCreated).Take(4))
+                                {
+                                    <div class="review">
+                                        <input type="text" class="reviewId" value="@review.Id" hidden />
+                                        <p>@review.ApplicationUser.Name</p>
+                                        <div class="rating">
+                                            <!-- display filled star for each point of rating -->
+                                            @for (var i = 0; i < review.Rating; i++)
+                                            {
+                                                <i class="fas fa-star" style="color: #f3994a;"></i>
+                                            }
+                                            <!-- display empty star for the rest -->
+                                            @for (var i = review.Rating; i < 5; i++)
+                                            {
+                                                <i class="far fa-star"></i>
+                                            }
+                                        </div>
+                                        <p class="comment">
+                                            @review.Comment
+                                        </p>
+                                        @if (review.ApplicationUser.Id.Equals(Model.ApplicationUserId))
+                                        {
+                                            <a class="btn btn-primary edit-review" data-review-id="@review.Id">Edit Review</a>
+                                        }
+                                    </div>
+                                }
+                            }
+                        </div>
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+    </section> 
+
+
+
+
+<!-- Review form -->
+<form asp-action="CreateReview" asp-controller="ProductReview" method="post">
+    <h2 class="mb-4">Để lại đánh giá</h2>
+     @if (SignInManager.IsSignedIn(User))
+    {
+         <span>@user.Name</span>
+    }
+    <input type="hidden" asp-for="ProductId" value="@Model.ShoppingCart.ProductId" />
+    <input type="hidden" asp-for="ApplicationUserId" value="@Model.ApplicationUserId" />
+
+    <div class="form-group">
+        <label for="rating">Rating</label>
+        <div id="rating">
+            @foreach (var i in Enumerable.Range(1, 5))
+            {
+                <i class="far fa-star rating-star" style="color: gold;" data-rating="@i"></i>
+            }
+        </div>
+        <input type="hidden" asp-for="ProductReview.Rating" id="ratingInput" />
+    </div>
+    <div class="form-group">
+        <label for="comment">Comment</label>
+        <textarea asp-for="ProductReview.Comment" class="form-control" id="comment" placeholder="Viết đánh giá của bạn ở đây..."></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+</form>
+
+
+<!-- Review Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Review</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-controller="ProductReview" asp-action="EditReview" method="post">
+                <div class="modal-body">
+                    <input asp-for="ProductId" hidden />
+                    <input asp-for="ApplicationUserId" hidden />
+                    <input asp-for="ProductReview.Id" class="form-control" id="reviewId" hidden />
+                <div class="form-group">
+                        <label asp-for="ProductReview.Comment">Comment</label>
+                    <textarea asp-for="ProductReview.Comment"  class="form-control" id="comment"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="rating">Rating</label>
+                        <input asp-for="ProductReview.Rating"   min="1" max="5" class="form-control" id="rating" />
+                </div>
+                </div>
+                 <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary btn-save">Save changes</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        // rating stars interaction
+        $(document).ready(function () {
+            $('.rating-star').on('click', function () {
+                var rating = $(this).data('rating');
+                $('#ratingInput').val(rating);
+                updateStars(rating);
+            });
+
+            $('.rating-star').on('mouseover', function () {
+                var hoverRating = $(this).data('rating');
+                updateStars(hoverRating);
+            });
+
+            $('#rating').on('mouseleave', function () {
+                var rating = $('#ratingInput').val();
+                updateStars(rating);
+            });
+
+            function updateStars(rating) {
+                $('.rating-star').each(function () {
+                    if ($(this).data('rating') <= rating) {
+                        $(this).removeClass('far').addClass('fas');
+                    } else {
+                        $(this).removeClass('fas').addClass('far');
+                    }
+                });
+            }
+        });
+
+        // review edit functionality
+        $(document).ready(function () {
+            $('.edit-review').click(function () {
+                var container = $(this).closest('.review');
+                var reviewId = container.find('.reviewId').val();
+                var comment = container.find('.comment').text().trim();
+                var rating = container.find('.fas.fa-star').length;
+
+                $('#editModal textarea[name="ProductReview.Comment"]').val(comment);
+                $('#editModal input[name="ProductReview.Rating"]').val(rating);
+                $('#editModal input[name="ProductReview.Id"]').val(reviewId);
+                $('#editModal').modal('show');
+                console.log(comment + "  " + rating + " id " + reviewId)
+            });
+
+            $('#editModal .btn-save').click(function () {
+                var comment = $('#editModal textarea[name="ProductReview.Comment"]').val();
+                var rating = $('#editModal input[name="ProductReview.Rating"]').val();
+
+                var id = $('#editModal input[name="ProductReview.Id"]').val();
+                console.log(comment + " modal  " + rating)
+                // Submit changes here (e.g., send an AJAX request to the server)
+
+                $('#editModal').modal('hide');
+            });
+        });
+    </script>
+}

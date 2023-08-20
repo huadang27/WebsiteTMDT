@@ -1,0 +1,99 @@
+﻿@model ShoppingCartVM
+
+<h2> Thông tin đơn hàng</h2>
+<form method="post">
+<section class="cart_area section-padding">
+    <div class="container">
+        <div class="cart_inner">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Sản phẩm</th>
+                            <th scope="col">Giá tiền</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Tổng tiền</th>
+                        </tr>
+                    </thead>
+
+
+
+                    <tbody>
+                         @foreach(var item in Model.ShoppingCartList)
+                    {
+                             
+                                   var money = item.Product.Price * item.Count;
+                                
+                            <tr>
+                                <td>
+                                    <div class="media">
+                                        <div class="d-flex">
+                                            @if (item.Product.ProductImages != null && item.Product.ProductImages.Count() > 0)
+                                            {
+                                                <img src="@item.Product.ProductImages.FirstOrDefault().ImageUrl" class="card-img-top rounded w-100" alt="@item.Product.Title" />
+                                            }
+                                            else
+                                            {
+                                                <img src="https://placehold.co/500x600/png" alt="Hình ảnh không tồn tại"
+                                                     class="card-img-top rounded w-100" />
+                                            }
+                                        </div>
+                                        <div class="media-body">
+                                            <p>@item.Product.Title</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <h5>@item.Product.Price</h5>
+                                </td>
+                                <td>
+                                        <div class="product_count">
+                                            <a asp-action="minus" asp-route-cartId="@item.Id" class="input-number-decrement" style="color :black ">
+                                                <i class="far fa-minus"></i>
+                                            </a>
+                                            <input class="" id="count-@item.Id"
+                                                   type="text"
+                                                   value="@item.Count"
+                                                   min="0"
+                                                   max="10" />
+                                            <a asp-action="plus" asp-route-cartId="@item.Id" class="input-number-increment" style="color :black ">
+                                                <i class="far fa-plus"></i>
+                                            </a>
+                                        </div>     
+                                </td>
+                                <td>
+                                    <h5>@money</h5>
+                                </td>
+                            </tr>
+
+                    }
+                       
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <h5>Tổng tiền</h5>
+                            </td>
+                            <td>
+                                <h5>@(Model.OrderHeader.OrderTotal.ToString("c"))</h5>
+                            </td>
+                        </tr>
+                    </tbody> 
+                </table>
+                <div class="checkout_btn_inner float-right">
+                    <a class="btn" href="Home">Tiếp tục mua sắm</a>
+                    <a class="btn checkout_btn" asp-action="Summary" asp-controller="Cart" asp-area="Customer">Mua hàng</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</form>
+
+
+
+@* @section Scripts{
+    <script src="~/js/cart.js"></script>
+}
+ *@

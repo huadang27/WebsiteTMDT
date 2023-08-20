@@ -1,0 +1,171 @@
+﻿@model ShoppingCartVM
+<form method="post">
+	<br />
+	<div class="container">
+		<div class="card shadow border-0">
+
+			<div class="card-header bg-secondary bg-gradient text-light ml-0 py-4">
+				<div class="row px-4">
+					<div class="col-6">
+						<h5 class="pt-2 text-white">
+							Order Summary
+						</h5>
+					</div>
+					<div class="col-6 text-end">
+						<a class="btn btn-outline-danger btn-sm" href="/Customer/Cart">Quay lại giỏ hàng</a>
+					</div>
+				</div>
+			</div>
+			<div class="card-body">
+				<div class="container rounded p-2">
+					<div class="row">
+						<div class="col-12 col-lg-6 pb-4">
+							<div class="row">
+								<h4 class="d-flex justify-content-between align-items-center mb-3">
+									<span class="text-info">Chi tiết vận chuyển:</span>
+								</h4>
+							</div>
+							<div class="row my-1">
+								<div class="col-3">
+									<label>Tên</label>
+								</div>
+								<div class="col-9">
+									<input asp-for="OrderHeader.Name" />
+									<span asp-validation-for="OrderHeader.Name" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="row my-1">
+								<div class="col-3">
+									<label>Số điện thoại</label>
+								</div>
+								<div class="col-9">
+									<input asp-for="OrderHeader.PhoneNumber" />
+									<span asp-validation-for="OrderHeader.PhoneNumber" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="row my-1">
+								<div class="col-3">
+									<label>Địa chỉ</label>
+								</div>
+								<div class="col-9">
+									<input asp-for="OrderHeader.StreetAddress" />
+									<span asp-validation-for="OrderHeader.StreetAddress" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="row my-1">
+								<div class="col-3">
+									<label>Thành Phố</label>
+								</div>
+								<div class="col-9">
+									<input asp-for="OrderHeader.City" />
+									<span asp-validation-for="OrderHeader.City" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="row my-1">
+								<div class="col-3">
+									<label>Đất nước</label>
+								</div>
+								<div class="col-9">
+									<input asp-for="OrderHeader.State" />
+									<span asp-validation-for="OrderHeader.State" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="row my-1">
+								<div class="col-3">
+									<label>Mã bưu điện</label>
+								</div>
+								<div class="col-9">
+									<input asp-for="OrderHeader.PostalCode" />
+									<span asp-validation-for="OrderHeader.PostalCode" class="text-danger"></span>
+								</div>
+							</div>
+						</div>
+						<div class="col-12 col-lg-5 offset-lg-1">
+							<h4 class="d-flex justify-content-between align-items-center mb-3">
+								<span class="text-info">Tóm tắt đơn hàng:</span>
+							</h4>
+					@* 	 thông tin từng đơn hàng *@
+							<ul class="list-group mb-3">
+								@foreach(var details in Model.ShoppingCartList)
+								{
+									<li class="list-group-item d-flex justify-content-between">
+										<div>
+											<h6 class="my-0">@details.Product.Title</h6>
+											<small class="text-muted">Số lượng: @details.Count</small>
+										</div>
+										<span class="text-muted">@((details.Price*details.Count).ToString("c")) </span>
+									</li>
+
+
+								}
+								<li class="list-group-item d-flex justify-content-between bg-light">
+									<small class="text-info">Phiếu giảm giá: </small>
+									<input type="text" asp-for="CouponCode" id="couponCodeInput" />
+									<button type="button" id="applyCouponButton">Áp dụng mã</button>
+								</li>
+
+								<!-- This line will show the discount amount -->
+								<li class="list-group-item d-flex justify-content-between bg-light">
+									<small class="text-info">Giảm giá:</small>
+									<span id="discountAmount"></span>
+								</li>
+
+								<li class="list-group-item d-flex justify-content-between bg-light">
+									<small class="text-info">Total (USD)</small>
+									<strong class="text-info" id="orderTotal" >@(Model.OrderHeader.OrderTotal.ToString("c"))</strong>
+								</li>
+								
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-footer">
+				<div class="row">
+					<div class="col-12 col-md-8 pt-2">
+						<p style="color:maroon; font-size:14px;">
+							Ngày đến dự kiến:
+							@DateTime.Now.AddDays(7).ToShortDateString() - @DateTime.Now.AddDays(14).ToShortDateString()
+
+						</p>
+					</div>
+					<div class="col-12 col-md-4">
+						<button type="submit" value="Place Order" class="btn btn-primary form-control" > Place Order</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+@section Scripts{
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#applyCouponButton').click(function () {
+				var couponCode = $('#couponCodeInput').val();
+				var currentTotal = parseFloat($('#orderTotal').text().replace('$', ''));
+				$.ajax({
+					url: '/Admin/Coupon/CheckCouponCode',
+					type: 'POST',
+					data: {
+						couponCode: couponCode,
+						currentTotal: currentTotal
+					},
+					success: function (response) {
+						if (response.isValid) {
+							var discountAmount = response.discountAmount;
+							$('#discountAmount').text("$" + discountAmount.toFixed(2));
+							$('#orderTotal').text("$" + (currentTotal - discountAmount).toFixed(2));
+							toastr.success('Mã giảm giá hợp lệ');
+						} else {
+							toastr.error('Mã giảm giá không hợp lệ');
+						}
+					},
+					error: function () {
+						toastr.error('Lỗi xảy ra khi kiểm tra mã giảm giá');
+					}
+				});
+			});
+		});
+	</script>
+}

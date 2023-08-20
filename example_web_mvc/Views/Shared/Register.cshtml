@@ -1,0 +1,262 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HtppContextAccessor
+
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - example_web_mvc</title>
+    <meta name="description" content="" />
+    <link rel="shortcut icon"
+          type="image/x-icon"
+          href="~/images/favicon.png" />
+
+    <link rel="stylesheet" href="~/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/assets/css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="~/assets/css/slicknav.css" />
+    <link rel="stylesheet" href="~/assets/css/animate.min.css" />
+    <link rel="stylesheet" href="~/assets/css/price_rangs.css" />
+    <link rel="stylesheet" href="~/assets/css/magnific-popup.css" />
+    <link rel="stylesheet" href="~/assets/css/fontawesome-all.min.css" />
+    <link rel="stylesheet" href="~/assets/css/themify-icons.css" />
+    <link rel="stylesheet" href="~/assets/css/slick.css" />
+    <link rel="stylesheet" href="~/assets/css/nice-select.css" />
+    <link rel="stylesheet" href="~/assets/css/style.css" />
+    @* <script src="~/js/home.js" asp-append-version="true"></script> *@
+
+    <script nonce="8f280784-52ef-40f0-aac1-57ca7d966ab6">
+        (function (w, d) {
+            !(function (a, b, c, d) {
+                a[c] = a[c] || {};
+                a[c].executed = [];
+                a.zaraz = { deferred: [], listeners: [] };
+                a.zaraz.q = [];
+                a.zaraz._f = function (e) {
+                    return function () {
+                        var f = Array.prototype.slice.call(arguments);
+                        a.zaraz.q.push({ m: e, a: f });
+                    };
+                };
+                for (const g of ["track", "set", "debug"]) a.zaraz[g] = a.zaraz._f(g);
+                a.zaraz.init = () => {
+                    var h = b.getElementsByTagName(d)[0],
+                        i = b.createElement(d),
+                        j = b.getElementsByTagName("title")[0];
+                    j && (a[c].t = b.getElementsByTagName("title")[0].text);
+                    a[c].x = Math.random();
+                    a[c].w = a.screen.width;
+                    a[c].h = a.screen.height;
+                    a[c].j = a.innerHeight;
+                    a[c].e = a.innerWidth;
+                    a[c].l = a.location.href;
+                    a[c].r = b.referrer;
+                    a[c].k = a.screen.colorDepth;
+                    a[c].n = b.characterSet;
+                    a[c].o = new Date().getTimezoneOffset();
+                    if (a.dataLayer)
+                        for (const n of Object.entries(
+                            Object.entries(dataLayer).reduce(
+                                (o, p) => ({ ...o[1], ...p[1] }),
+                                {}
+                            )
+                        ))
+                            zaraz.set(n[0], n[1], { scope: "page" });
+                    a[c].q = [];
+                    for (; a.zaraz.q.length;) {
+                        const q = a.zaraz.q.shift();
+                        a[c].q.push(q);
+                    }
+                    i.defer = !0;
+                    for (const r of [localStorage, sessionStorage])
+                        Object.keys(r || {})
+                            .filter((t) => t.startsWith("zaraz"))
+                            .forEach((s) => {
+                                try {
+                                    a[c]["z_" + s.slice(7)] = JSON.parse(r.getItem(s));
+                                } catch {
+                                    a[c]["z_" + s.slice(7)] = r.getItem(s);
+                                }
+                            });
+                    i.referrerPolicy = "origin";
+                    i.src =
+                        "../../cdn-cgi/zaraz/sd0d9.js?z=" +
+                        btoa(encodeURIComponent(JSON.stringify(a[c])));
+                    h.parentNode.insertBefore(i, h);
+                };
+                ["complete", "interactive"].includes(b.readyState)
+                    ? zaraz.init()
+                    : a.addEventListener("DOMContentLoaded", zaraz.init);
+            })(w, d, "zarazData", "script");
+        })(window, document);
+    </script>
+</head>
+<body>
+    <header>
+        <div class="header-area">
+            <div class="main-header">
+                <div class="header-top">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="d-flex justify-content-between align-items-center flex-sm">
+                                    <div class="header-info-left d-flex align-items-center">
+                                        <div class="logo">
+                                            <a href="/Customer/Home">
+                                                <img src="~/images/logo.png" alt="" />
+                                            </a>
+                                        </div>
+                                        <div class="form-box">
+                                            <input type="search"
+                                                   id="searchInput" name="search" autocomplete="off"
+                                                   placeholder="Search book by author or publisher" />
+                                            <ul class="dropdown-menu" id="searchResults" aria-labelledby="searchInput">
+                                                <!-- Search results will be inserted here -->
+                                            </ul>
+
+                                            <div class="search-icon">
+                                                <i class="ti-search"></i>
+                                            </div>
+                                        </div>
+
+                                        @*   <form action="#" class="form-box">
+                                        <input type="text"
+                                        name="Search"
+                                        placeholder="Search book by author or publisher" />
+                                        <div class="search-icon">
+                                        <i class="ti-search"></i>
+                                        </div>
+                                        </form> *@
+                                    </div>
+                                    <div class="header-info-right d-flex align-items-center">
+                                        <ul>
+                                            <li><a href="#">FAQ</a></li>
+                                            <li><a href="#">Track Order</a></li>
+                                            <li class="shopping-card">
+                                                <a href="/Customer/Cart">
+                                                    <img src="~/assets/img/icon/cart.svg" alt="" />
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="/Login" class="btn header-btn">Sign in</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-bottom header-sticky">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-xl-12">
+                                <div class="logo2">
+                                    <a href="/Customer/Home">
+                                        <img src="~/images/logo.png" alt="" />
+                                    </a>
+                                </div>
+
+                                <div class="main-menu text-center d-none d-lg-block">
+                                    <nav>
+                                        <ul id="navigation">
+                                            <li><a href="/Customer/Home">Home</a></li>
+                                            <li><a href="/Customer/Category">Categories</a></li>
+                                            <li><a href="about.html">About</a></li>
+                                            <li>
+                                                <a href="#">Pages</a>
+                                                <ul class="submenu">
+                                                    <li><a href="/Login">login</a></li>
+                                                    <li><a href="/Home/Cart">Cart</a></li>
+                                                    <li><a href="checkout.html">Checkout</a></li>
+                                                    <li>
+                                                        <a href="book-details.html">book Details</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="blog_details.html">Blog Details</a>
+                                                    </li>
+                                                    <li><a href="elements.html">Element</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="blog.html">Blog</a></li>
+                                            <li><a href="contact.html">Contect</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-12">
+                                <div class="mobile_menu d-block d-lg-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div>
+        <div>
+            <main role="main">
+                <partial name="_Notification" />
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+
+    <div id="back-top">
+        <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
+    </div>
+
+    <script src="~/assets/js/vendor/modernizr-3.5.0.min.js"></script>
+    <script src="~/assets/js/vendor/jquery-1.12.4.min.js"></script>
+    @* <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> *@
+    <script src="~/assets/js/popper.min.js"></script>
+    <script src="~/assets/js/bootstrap.min.js"></script>
+
+    <script src="~/assets/js/owl.carousel.min.js"></script>
+    <script src="~/assets/js/slick.min.js"></script>
+    <script src="~/assets/js/jquery.slicknav.min.js"></script>
+
+    <script src="~/assets/js/wow.min.js"></script>
+    <script src="~/assets/js/jquery.magnific-popup.js"></script>
+    <script src="~/assets/js/jquery.nice-select.min.js"></script>
+    <script src="~/assets/js/jquery.counterup.min.js"></script>
+    <script src="~/assets/js/waypoints.min.js"></script>
+    <script src="~/assets/js/price_rangs.js"></script>
+
+    <script src="~/assets/js/contact.js"></script>
+    <script src="~/assets/js/jquery.form.js"></script>
+    <script src="~/assets/js/jquery.validate.min.js"></script>
+    <script src="~/assets/js/mail-script.js"></script>
+    <script src="~/assets/js/jquery.ajaxchimp.min.js"></script>
+
+    <script src="~/assets/js/plugins.js"></script>
+    <script src="~/assets/js/main.js"></script>
+
+    <script src="~/js/search.js"></script>
+
+    <script async
+            src="~/assets/js/googletagmanager.js"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+
+        gtag("config", "UA-23581568-13");
+    </script>
+    <script defer
+            src="~/assets/js/static.cloudflareinsights.com_beacon.min.js_v2cb3a2ab87c5498db5ce7e6608cf55231689030342039.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Product>
+
+<div class="container">
+    <h2 class="my-3">Sản phẩm đã xem</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var product in Model)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <img src="@product.ProductImages.First().ImageUrl" class="card-img-top" alt="@product.Title">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Title</h5>
+                        <p class="card-text">@product.Description</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="/Product/Details/@product.Id" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

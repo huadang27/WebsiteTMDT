@@ -1,0 +1,395 @@
+﻿@* @model ProductVM *@
+@* @addTagHelper *, X.PagedList.Mvc.Core
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common; *@
+@model dynamic
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="slider-active dot-style">
+            <div class="single-slider slider-height slider-bg1 d-flex align-items-center">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-xxl-4 col-xl-4 col-lg-5 col-md-6 col-sm-7">
+                            <div class="hero-caption text-center">
+                                <span data-animation="fadeInUp" data-delay=".2s">Science Fiction</span>
+                                <h1 data-animation="fadeInUp" data-delay=".4s">
+                                    The History<br />
+                                    of Phipino
+                                </h1>
+                                <a href="#"
+                                   class="btn hero-btn"
+                                   data-animation="bounceIn"
+                                   data-delay=".8s">Browse Store</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="single-slider slider-height slider-bg2 d-flex align-items-center">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-xxl-4 col-xl-4 col-lg-5 col-md-6 col-sm-7">
+                            <div class="hero-caption text-center">
+                                <span data-animation="fadeInUp" data-delay=".2s">Science Fiction</span>
+                                <h1 data-animation="fadeInUp" data-delay=".4s">
+                                    The History<br />
+                                    of Phipino
+                                </h1>
+                                <a href="#"
+                                   class="btn hero-btn"
+                                   data-animation="bounceIn"
+                                   data-delay=".8s">Browse Store</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="single-slider slider-height slider-bg3 d-flex align-items-center">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-xxl-4 col-xl-4 col-lg-5 col-md-6 col-sm-7">
+                            <div class="hero-caption text-center">
+                                <span data-animation="fadeInUp" data-delay=".2s">Science Fiction</span>
+                                <h1 data-animation="fadeInUp" data-delay=".4s">
+                                    The History<br />
+                                    of Phipino
+                                </h1>
+                                <a href="#"
+                                   class="btn hero-btn"
+                                   data-animation="bounceIn"
+                                   data-delay=".8s">Browse Store</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="best-selling section-bg">
+
+    <div class="row justify-content-center">
+        <div class="col-xl-7 col-lg-8">
+            <div class="section-tittle text-center mb-55">
+                <h2>Lượng sách bán chạy</h2>
+            </div>
+        </div>
+    </div>
+    <style>
+        .height-min {
+            min-height: 135px;
+            overflow: hidden;
+        }
+    </style>
+
+     @* nội dung đổ giao diện *@
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="selling-active">
+              
+            
+
+
+                @foreach (var item in Model.GetProductsTop10)
+                {
+                <div class="properties pb-20">
+
+                    <div class="properties-card">
+                            @using (Html.BeginForm("Details", "Home", new { Area = "Customer" }, FormMethod.Post, false, null))
+                        {
+                            <div class="properties-img">
+                                <a href="/Customer/Home/Details/?productId=@item.ProductDTO.Id">
+                                    @if (item.ProductDTO.ProductImages != null && item.ProductDTO.ProductImages.Count > 0)
+                                    {
+                                        <img src="@item.ProductDTO.ProductImages[0].ImageUrl" alt="@item.ProductDTO.Title" />
+                                    }
+                                    else
+                                    {
+                                        <img src="/images/default-product-image.png" alt="Default product image" />
+                                    }
+                                </a>
+                            </div>
+                            <div class="properties-caption">
+                                <h3 class="height-min"><a href="/Customer/Home/Details/?productId=@item.ProductDTO.Id">@item.ProductDTO.Title</a></h3>
+                                <p>@item.ProductDTO.Author</p>
+                                <div class="properties-footer d-flex justify-content-between align-items-center">
+                                        <input type="hidden" name="ShoppingCart.ProductId" value="@item.ProductDTO.Id" />
+                                        <input type="hidden" name="ShoppingCart.Count" value="1" />
+
+                                    <button type="submit"
+                                            class=" white-btn mr-10">
+                                        <i class="far fa-cart-plus"></i>
+                                    </button>
+
+                                    <div class="price">
+                                        <span>@item.ProductDTO.Price100</span>
+                                          
+                                    </div>
+                                    @* số lượng đã bán *@
+                                  @*       <span>@item.TotalCount</span> *@
+                                  @*       <span> @item.ProductDTO.Quantity</span> *@
+                                    </div>
+                            </div>
+                                
+                        } <!-- Đóng thẻ form tại đây -->
+                    </div>
+                </div>
+                }
+
+
+                @* @foreach (var item in Model.GetProductsTop10)
+                {
+                    <div class="properties pb-20">
+                      
+                        <div class="properties-card">
+                            <div class="properties-img">
+                                <a href="/Customer/Home/Details/?productId=@item.ProductDTO.Id">
+                                    @if (item.ProductDTO.ProductImages != null && item.ProductDTO.ProductImages.Count > 0)
+                                    {
+                                        <img src="@item.ProductDTO.ProductImages[0].ImageUrl" alt="@item.ProductDTO.Title" />
+                                    }
+                                    else
+                                    {
+                                        <img src="/images/default-product-image.png" alt="Default product image" />
+                                    }
+                                </a>
+                            </div>
+                            <div class="properties-caption">
+                                <h3 class="height-min" ><a href="/Customer/Home/Details/?productId=@item.ProductDTO.Id">@item.ProductDTO.Title</a></h3>
+                                <p>@item.ProductDTO.Author</p>
+                                <div class="properties-footer d-flex justify-content-between align-items-center">
+
+                                        <button type="submit"
+                                                class=" white-btn mr-10">
+                                            <i class="far fa-cart-plus"></i>
+                                        </button>
+                                  
+                                    <div class="price">
+                                        <span>@item.ProductDTO.Price100</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                } *@
+
+              
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="services-area2 top-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9 col-lg-9 col-md-8">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="section-tittle d-flex justify-content-between align-items-center mb-40">
+                            <h2 class="mb-0">Nổi Bật Tuần Này</h2>
+                            <a href="#" class="browse-btn">Tất cả</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="services-active">
+                            @foreach (var item in Model.Featuredthisweek)
+                            {
+                                <div class="single-services d-flex align-items-center">
+                                    <div class="features-img">
+                                        @if (item.ProductImages != null && item.ProductImages.Count > 0)
+                                        {
+                                            <img src="@item.ProductImages[0].ImageUrl" alt="@item.Title"  width="426" height="282"/>
+                                        }
+                                        else
+                                        {
+                                            <img src="/images/default-product-image.png" alt="Default product image" />
+                                        }
+                                      @*   <img src="assets/img/gallery/best-books1.jpg" alt="" /> *@
+                                    </div>
+                                    <div class="features-caption">
+                                        <img src="assets/img/icon/logo.html" alt="" />
+                                        <h3>@item.Title</h3>
+                                        <p>@item.Author</p>
+                                        
+                                        <div class="price">
+                                            <span>@item.Price100</span>
+                                        
+                                        </div>
+                                       
+                                        <a href="https://localhost:7139/Customer/Home/Details/?productId=@item.Id" class="border-btn">Chi tiết</a>
+                                    </div>
+                                </div>
+                            }
+                          
+
+                         
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-9">
+                <div class="google-add">
+                    <img src="/assets/img/gallery/ad.jpg" alt="" class="w-100" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<section class="our-client section-padding best-selling">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-xl-5 col-lg-5 col-md-12">
+                <div class="section-tittle mb-40">
+                    <h2>Các mục được xuất bản mới nhất</h2>
+                </div>
+            </div>
+            <div class="col-xl-7 col-lg-7 col-md-12">
+                <div class="nav-button mb-40">
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-link active"
+                               id="nav-one-tab"
+                               data-bs-toggle="tab"
+                               role="tab"
+                               data-category="All"
+                               aria-controls="nav-one"
+                               aria-selected="true">Tất cả</a>
+                            <a class="nav-link"
+                               id="nav-two-tab"
+                               data-bs-toggle="tab"
+                               role="tab"
+                               data-category="Kinh dị"
+                               aria-controls="nav-two"
+                               aria-selected="false">Kinh dị</a>
+                            <a class="nav-link"
+                               id="nav-three-tab"
+                               data-bs-toggle="tab"
+                               href="#nav-three"
+                               role="tab"
+                               data-category="Giật gân"
+                               aria-controls="nav-three"
+                               aria-selected="false">Giật gân</a>
+                            <a class="nav-link"
+                               id="nav-four-tab"
+                               data-bs-toggle="tab"
+                               data-category="Khoa học viễn tưởng"
+                               role="tab"
+                               aria-controls="nav-four"
+                               aria-selected="false">Khoa học viễn tưởng</a>
+                            <a class="nav-link"
+                               id="nav-five-tab"
+                               data-category="Lịch sử"
+                               data-bs-toggle="tab"
+                               role="tab"
+                               aria-controls="nav-five"
+                               aria-selected="false">Lịch sử</a>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active"
+                 id="nav-one"
+                 role="tabpanel"
+                 aria-labelledby="nav-one-tab">
+                <div class="row" id="productContainer">
+                    <style>
+                        .height-min {
+                            min-height: 135px;
+                            overflow: hidden;
+                        }
+                    </style>
+                  @*    @foreach (var item in Model.GetProductInPublishDate)
+                    {
+                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="properties pb-30">
+                            <div class="properties-card">
+                                <div class="properties-img">
+                                    <a href="book-details.html">
+                                            @if (item.ProductImages != null && item.ProductImages.Count > 0)
+                                            {
+                                                <img src="@item.ProductImages[0].ImageUrl" alt="@item.Title" />
+                                            }
+                                            else
+                                            {
+                                                <img src="/images/default-product-image.png" alt="Default product image" />
+                                            }
+                                    </a>
+                                </div>
+                                <div class="properties-caption properties-caption2">
+                                        <h3 class="height-min"><a href="book-details.html">@item.Title</a></h3>
+                                    <p>@item.Author</p>
+                                    <div class="properties-footer d-flex justify-content-between align-items-center">
+                                        <div class="
+                                            ">
+                                            <div class="rating">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star-half-alt"></i>
+                                            </div>
+                                            <p>(<span>120</span> Review)</p>
+                                        </div>
+                                        <div class="price">
+                                            <span>@item.Price100</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    } *@
+                   
+                 
+                </div>
+            </div>
+           
+      
+        </div>
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="more-btn text-center mt-15">
+                    <a href="#" class="border-btn border-btn2 more-btn2">Browse More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+
+
+
+
+
+
+
+@* @if (Model.PageCount > 1)
+{
+    <div class="d-flex justify-content-center">
+        <h4>
+            @Html.PagedListPager(
+        Model,
+        page => Url.Action("Index", new { page, search = Context.Request.Query["search"] }),
+        new PagedListRenderOptions { MaximumPageNumbersToDisplay = 5 }
+        )
+        </h4>
+    </div>
+} *@
+
+@section Scripts{
+    <script src="~/js/home.js"></script>
+}

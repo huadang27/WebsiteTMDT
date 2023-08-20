@@ -1,0 +1,227 @@
+﻿@model List<Coupon>
+
+@{
+  
+    Layout = "~/Views/Shared/_LayoutManager.cshtml";
+}
+
+
+
+<div class="container-fluid p-0">
+
+    <div class="mb-3">
+        <h1 class="h3 d-inline align-middle">Quản lý Mã giảm giá</h1>
+    </div>
+
+    <div class="mb-3">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal" onclick="showModal()">
+            <i class="align-middle" data-feather="plus"></i> Thêm mới
+        </button>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-xl-12">
+      
+            <div class="card">
+                <table class="table table-striped" id="tblCategory">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Mã code</th>
+                            <th>Mô tả</th>
+                            <th>Số tiền giảm giá</th>
+                            <th>Tiền chi tối thiểu</th>
+                            <th>Ngày bắt đầu</th>
+                            <th>Ngày kết thúc</th>
+                            <th>Số lượng sử dụng</th>
+                            <th>Đã sử dụng</th>
+                            <th>Áp dụng tất cả sản phẩm</th>
+                            <th>Đang hoạt động</th>
+                            <th nowrap>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int STT = 1;
+                        }
+                        @foreach (var item in Model)
+                        {
+                            <tr id="hihi-@item.Id">
+                                <td>@STT</td>
+                                <td id="code-@item.Id">@item.Code</td>
+                                <td id="description-@item.Id">@item.Description</td>
+                                <td id="discount-amount-@item.Id">@item.DiscountAmount</td>
+                                <td id="minimum-spend-@item.Id">@item.MinimumSpend</td>
+                                <td id="start-date-@item.Id">@item.StartDate</td>
+                                <td id="end-date-@item.Id">@item.EndDate</td>
+                                <td id="max-use-times-@item.Id">@item.MaxUseTimes</td>
+                                <td id="used-times-@item.Id">@item.UsedTimes</td>
+                                <td id="apply-for-all-products-@item.Id">@item.ApplyForAllProducts</td>
+                                <td id="is-active-@item.Id">@item.IsActive</td>
+                                <td class="table-action">
+                                    <a href="/Admin/Coupon/Upsert/@item.Id">
+                                        <i class="fal fa-pen" style="color: #000000; margin-right: 25px;"></i>
+                                    </a>
+                                   @*  <a href="#" onclick="populateModalWithIndustryDetails(@item.Id)">
+                                        <i class="fal fa-pen" style="color: #000000; margin-right: 25px;"></i>
+                                    </a> *@
+                                    <a onclick="deleteIndustry(@item.Id)">
+                                        <i class="fal fa-trash" style="color: #000000;"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            STT++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Thêm mới một danh mục</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn-close" onclick="resetText()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Mã code <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="Code" placeholder="Nhập mã code" style="margin-bottom: 5px;" />
+                    <span id="checkName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Mô tả <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="Description" placeholder="Nhập mô tả" style="margin-bottom: 5px;" />
+                    <span id="checkDisplay" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Số tiền giảm giá</label>
+                    <input type="number" class="form-control" id="DiscountAmount" placeholder="Nhập số tiền giảm giá" style="margin-bottom: 5px;" />
+                    <span id="checkDiscount" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Số tiền tối thiểu</label>
+                    <input type="number" class="form-control" id="MinimumSpend" placeholder="Nhập số tiền tối thiểu" style="margin-bottom: 5px;" />
+                    <span id="checkMinimumSpend" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Ngày bắt đầu</label>
+                    <input type="date" class="form-control" id="StartDate" style="margin-bottom: 5px;" />
+                    <span id="checkStartDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Ngày kết thúc</label>
+                    <input type="date" class="form-control" id="EndDate" style="margin-bottom: 5px;" />
+                    <span id="checkEndDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Số lần tối đa</label>
+                    <input type="number" class="form-control" id="MaxUseTimes" placeholder="Nhập số lần tối đa" style="margin-bottom: 5px;" />
+                    <span id="checkMaxUseTimes" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Số lần đã sử dụng</label>
+                    <input type="number" class="form-control" id="UsedTimes" placeholder="Nhập số lần đã sử dụng" style="margin-bottom: 5px;" />
+                    <span id="checkUsedTimes" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Áp dụng cho tất cả sản phẩm</label>
+                    <select class="form-control" id="ApplyForAllProducts" style="margin-bottom: 5px;">
+                        <option value="true">Có</option>
+                        <option value="false">Không</option>
+                    </select>
+                    <span id="checkApplyForAllProducts" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Hoạt động</label>
+                    <select class="form-control" id="IsActive" style="margin-bottom: 5px;">
+                        <option value="true">Có</option>
+                        <option value="false">Không</option>
+                    </select>
+                    <span id="checkIsActive" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="resetText()">Đóng</button>
+                <button type="button" class="btn btn-primary" id="save" onclick="saveIndustry()">Thêm mới</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+@* 
+
+
+
+
+
+<div class="card shadow border-0 my-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Coupon List</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <div class="row pb-3">
+            <div class="col-6">
+            </div>
+            <div class="col-6 text-end">
+                <a asp-controller="Coupon" asp-action="Upsert" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Create New Coupon
+                </a>
+            </div>
+        </div>
+
+        <table id="tblData" class="table table-bordered table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>Discount Amount</th>
+                    <th>Minimum Spend</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Max Use Times</th>
+                    <th>Used Times</th>
+                    <th>Apply for All Products</th>
+                    <th>Is Active</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+ *@
+@section Scripts{
+    <script src="~/js/coupon.js"></script>
+}

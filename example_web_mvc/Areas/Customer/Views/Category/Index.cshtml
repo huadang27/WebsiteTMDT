@@ -1,0 +1,166 @@
+﻿@model dynamic
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="slider-area">
+            <div class="slider-height2 slider-bg4 d-flex align-items-center justify-content-center">
+                <div class="hero-caption hero-caption2">
+                    <h2>Book Category</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* //tìm kiếm sp  *@
+@* 
+<input type="text" data-id="productInput" placeholder="Nhập tên sản phẩm">
+
+<!-- Nút tìm kiếm -->
+<button type="button" onclick="searchProduct()">Tìm kiếm</button>
+
+<!-- Khu vực hiển thị kết quả tìm kiếm -->
+<div id="result"></div> *@
+
+
+<div class="listing-area pt-50 pb-50">
+    <div class="container" style="margin-right:0px">
+        <div class="row">
+         @*    <div class="col-xl-4 col-lg-4 col-md-6"> *@
+                <div class="category-listing mb-50">
+                    <div class="single-listing">
+                       @*  <div class="select-Categories pb-30">
+                            <div class="small-tittle mb-20">
+                                <h4>Thể loại</h4>
+                            </div>
+                            @foreach (var item in Model.CategoryName)
+                            {
+                                <label class="container">
+                                    @item.Name
+                                    <input type="checkbox" value="@item.Name" />
+                                    <span class="checkmark"></span>
+                                </label>
+                            }
+
+
+                        </div> *@
+
+                        @*  <aside class="left_widgets p_filter_widgets price_rangs_aside sidebar_box_shadow mb-40">
+                        <div class="small-tittle">
+                        <h4>Lọc theo giá bán</h4>
+                        </div>
+                        <div class="widgets_inner">
+                        <div class="range_item">
+                        <input type="text" class="js-range-slider" value="" />
+                        <div class="d-flex align-items-center">
+                        <div class="price_value d-flex justify-content-center">
+                        <input type="text"
+                        class="js-input-from"
+                        id="amount"
+                        readonly />
+                        <span>to</span>
+                        <input type="text"
+                        class="js-input-to"
+                        id="amount"
+                        readonly />
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </aside> *@
+
+                        @*        <div class="select-job-items2 mb-30">
+                        <div class="col-xl-12">
+                        <select name="select2">
+                        <option value="">Filter by Rating</option>
+                        <option value="">5 Star Rating</option>
+                        <option value="">4 Star Rating</option>
+                        <option value="">3 Star Rating</option>
+                        <option value="">2 Star Rating</option>
+                        <option value="">1 Star Rating</option>
+                        </select>
+                        </div>
+                        </div> *@
+
+
+
+                      @*   <div class="select-Categories">
+                            <div class="small-tittle mb-20">
+                                <h4>Lọc theo tên tác giả</h4>
+                            </div>
+                            @foreach (var item in Model.AuthorTop8)
+                            {
+                                <label class="container">
+                                    @item.ProductDTO.Author
+                                    <input type="checkbox" class="author-checkbox" value="@item.ProductDTO.Author" />
+                                    <span class="checkmark"></span>
+                                </label>
+                            }
+
+
+                        </div> *@
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-8 col-lg-8 col-md-6">
+                <div class="row justify-content-end">
+                    <div class="col-xl-4">
+                        <div class="product_page_tittle">
+                            <div class="short_by">
+                              @*   <select name="#" id="product_short_list">
+                                    <option>Duyệt theo mục phổ biến</option>
+                                    <option>Tên</option>
+                                    <option>Mới</option>
+                                    <option>Cũ</option>
+                                    <option>Giá</option>
+                                </select> *@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="best-selling p-0">
+                    <div class="row" id="productContainer">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="more-btn text-center mt-15">
+                            <a href="#" class="border-btn border-btn2 more-btn2">Browse More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@* </div> *@
+
+
+<section class="subscribe-area">
+    <div class="container">
+        <div class="subscribe-caption text-center subscribe-padding section-img2-bg"
+             data-background="assets/img/gallery/section-bg1.jpg">
+            <div class="row justify-content-center">
+                <div class="col-xl-6 col-lg-8 col-md-9">
+                    <h3>Join Newsletter</h3>
+                    <p>
+                        Lorem started its journey with cast iron (CI) products in
+                        1980. The initial main objective was to ensure pure water and
+                        affordable irrigation.
+                    </p>
+                    <form action="#">
+                        <input type="text" placeholder="Enter your email" />
+                        <button class="subscribe-btn">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts{
+
+    <script src="~/js/categoryUser.js" asp-append-version="true"></script>
+}
